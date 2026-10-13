@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/33405103/README.md)[U# Smart Student Planner
+# Smart Student Planner
 
 A responsive, full-stack academic task planner built with **Python**, **SQLite**, **JavaScript**, **HTML**, and **CSS**. Create assignments, organize them by course, set priorities and deadlines, track progress, and monitor overdue work. Designed as a software engineering portfolio project.
 
@@ -115,5 +115,3 @@ This is a **single-user local demo**, not a hosted multi-user product. By defaul
 ## Author
 
 Built by [Racks-work](https://github.com/Racks-work) as a software engineering portfolio project.
-ploading README.md…]()
-
