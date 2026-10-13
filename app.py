@@ -2,6 +2,7 @@
 import json
 import os
 import sqlite3
+from contextlib import contextmanager
 from datetime import datetime, date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -15,11 +16,17 @@ STATUSES = {'todo', 'in_progress', 'done'}
 PRIORITIES = {'low', 'medium', 'high'}
 
 
+@contextmanager
 def connect():
+    """Commit or roll back each operation, then close the SQLite handle."""
     con = sqlite3.connect(DB_PATH, timeout=10)
-    con.row_factory = sqlite3.Row
-    con.execute('PRAGMA busy_timeout=10000')
-    return con
+    try:
+        con.row_factory = sqlite3.Row
+        con.execute('PRAGMA busy_timeout=10000')
+        with con:
+            yield con
+    finally:
+        con.close()
 
 
 def init_db():
