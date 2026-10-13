@@ -35,6 +35,23 @@ class PlannerTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             app.update_task(999, {'bad': 'field'})
 
+    def test_empty_summary_and_due_dates(self):
+        self.assertEqual(app.summary()['total'], 0)
+        self.assertEqual(app.summary()['completed'], 0)
+        from datetime import date, timedelta
+        today = date.today()
+        app.create_task({'title':'Due today','due_date':today.isoformat()})
+        app.create_task({'title':'Late','due_date':(today-timedelta(days=1)).isoformat()})
+        app.create_task({'title':'Finished late','due_date':(today-timedelta(days=1)).isoformat(),'status':'done'})
+        result = app.summary()
+        self.assertEqual((result['total'],result['completed'],result['due_today'],result['overdue']),(3,1,1,1))
+
+    def test_invalid_filters_and_missing_task(self):
+        with self.assertRaises(ValueError):
+            app.list_tasks({'priority':'critical'})
+        self.assertIsNone(app.update_task(999,{'status':'done'}))
+        self.assertFalse(app.delete_task(999))
+
     def test_search_literal_wildcards(self):
         app.create_task({'title': '100% complete'})
         app.create_task({'title': 'Read chapter'})

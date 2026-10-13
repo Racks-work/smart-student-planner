@@ -125,9 +125,9 @@ def summary():
     today = date.today().isoformat()
     with connect() as con:
         row = con.execute('''SELECT COUNT(*) total,
-            SUM(CASE WHEN status='done' THEN 1 ELSE 0 END) completed,
-            SUM(CASE WHEN status!='done' AND due_date < ? THEN 1 ELSE 0 END) overdue,
-            SUM(CASE WHEN status!='done' AND due_date = ? THEN 1 ELSE 0 END) due_today
+            COALESCE(SUM(CASE WHEN status='done' THEN 1 ELSE 0 END), 0) completed,
+            COALESCE(SUM(CASE WHEN status!='done' AND due_date < ? THEN 1 ELSE 0 END), 0) overdue,
+            COALESCE(SUM(CASE WHEN status!='done' AND due_date = ? THEN 1 ELSE 0 END), 0) due_today
             FROM tasks''', (today, today)).fetchone()
     return dict(row)
 
