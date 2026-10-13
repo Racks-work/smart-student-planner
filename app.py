@@ -230,3 +230,4 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', '8000'))
     print(f'Smart Student Planner running at http://{host}:{port}', flush=True)
     ThreadingHTTPServer((host, port), Handler).serve_forever()
+
